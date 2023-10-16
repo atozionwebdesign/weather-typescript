@@ -1,0 +1,13 @@
+.cardDetailedView{
+    --bs-card-bg:transparent !important;
+    width: 85%;
+    margin: 20px auto;
+}
+
+.largeIcon {
+    height: 250px;
+    filter: drop-shadow(1px 1px #3F2121)
+}
+
+
+

@@ -1,0 +1,58 @@
+.weather-content {
+    background-image: url("../../assets/images/fall-landscape-theme.jpg");
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0 20px;
+    padding:5px;
+}
+
+.cardSimpleView {
+    display: inline-block !important;
+    width: 80%;
+    height: 275px !important;
+    text-align: center;
+    /* margin: 10px; */
+    vertical-align: middle;
+    --bs-card-bg:transparent !important;
+    transition: transform 1s linear;
+}
+
+.cardSimpleView:hover {
+    cursor: pointer;
+    transform: rotateY(360deg);
+}
+
+.cardBody {
+    vertical-align: middle !important;
+    margin-top: auto !important;
+}
+
+.icon {
+    height: 70px;
+    margin: 0;
+}
+
+.cloud-left {
+    width: 100px;
+    position: absolute;
+    left:10%;
+    z-index:2;
+}
+.cloud-right {
+    width: 125px;
+    position: absolute;
+    right:10%;
+    bottom: 30px;
+    z-index:2;
+}
+
+.detail-div {
+    position: relative;
+    width:90%;
+    text-align: center;
+    padding: 0 auto;
+    margin: 0 auto;
+    display: inline-block;
+    z-index: 1;
+}
