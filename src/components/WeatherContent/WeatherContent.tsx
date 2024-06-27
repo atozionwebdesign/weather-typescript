@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Card from "react-bootstrap/card";
+import { Table, Card } from "react-bootstrap";
 import Carousel from "react-multi-carousel";
 import { store } from "../../store";
 /**********APIs & Helpers************/
@@ -7,16 +7,16 @@ import { getForecastInfo } from "../../apis/getForecastInfo";
 /****** STYLES ******/
 import "./WeatherContent.css";
 import "react-multi-carousel/lib/styles.css";
-/****** ICONS/Images ******/
-import Sunny from "../../assets/icons/clear-day.svg";
-import Rain from "../../assets/icons/rain.svg";
-import Thunderstorm from "../../assets/icons/thunderstorms-rain.svg";
-import Cloudy from "../../assets/icons/cloudy.svg";
-import PartlyCloudyDay from "../../assets/icons/partly-cloudy-day.svg";
-import PartlyCloudyNight from "../../assets/icons/partly-cloudy-night.svg";
-import ClearDay from "../../assets/icons/clear-day.svg";
-import ClearNight from "../../assets/icons/clear-night.svg";
-import Cloud from "../../assets/images/cloud.png";
+
+/****** ANIMATIONS   ******/
+import * as partlyCloudyNight from "../../assets/animations/weather/partly-cloudy-night.json";
+import * as partlyCloudyDay from "../../assets/animations/weather/partly-cloudy-day.json";
+import * as thunderstorms from "../../assets/animations/weather/thunderstorms.json";
+import * as rain from "../../assets/animations/weather/rain.json";
+import * as sunny from "../../assets/animations/weather/sunny.json";
+import * as cloudy from "../../assets/animations/weather/cloudy.json";
+import * as clearNight from "../../assets/animations/weather/clear-night.json";
+import * as clearDay from "../../assets/animations/weather/clear-day.json";
 /****** CHILD COMPONENTS // INTERFACES *****/
 import CurrentWeather from "../CurrentWeather/CurrentWeather";
 import { WeatherPeriod } from "../../models/WeatherPeriod";
@@ -26,6 +26,98 @@ const WeatherContent = () => {
   const [forecast, setForecast] = useState<WeatherPeriod[]>([]);
   const [currentForecast, setCurrentForecast] = useState<WeatherPeriod>();
   const [relativeLocation, setRelativeLocation] = useState();
+
+  interface StringIndexedObject {
+    [key: string]: { icon: JSX.Element; animation: any };
+  }
+
+  const graphics: StringIndexedObject = {
+    thunderstorms: {
+      icon: (
+        <img
+          src={require("../../assets/icons/weather/thunderstorms.svg").default}
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: thunderstorms,
+    },
+    rain: {
+      icon: (
+        <img
+          src={require("../../assets/icons/weather/rain.svg").default}
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: rain,
+    },
+    partlyCloudyDay: {
+      icon: (
+        <img
+          src={
+            require("../../assets/icons/weather/partly-cloudy-day.svg").default
+          }
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: partlyCloudyDay,
+    },
+    partlyCloudyNight: {
+      icon: (
+        <img
+          src={
+            require("../../assets/icons/weather/partly-cloudy-night.svg")
+              .default
+          }
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: partlyCloudyNight,
+    },
+    cloudy: {
+      icon: (
+        <img
+          src={require("../../assets/icons/weather/cloudy.svg").default}
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: cloudy,
+    },
+    sunny: {
+      icon: (
+        <img
+          src={require("../../assets/icons/weather/sunny.svg").default}
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: sunny,
+    },
+    clearNight: {
+      icon: (
+        <img
+          src={require("../../assets/icons/weather/clear-night.svg").default}
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: clearNight,
+    },
+    clearDay: {
+      icon: (
+        <img
+          src={require("../../assets/icons/weather/clear-day.svg").default}
+          alt=""
+          className="icon"
+        />
+      ),
+      animation: clearDay,
+    },
+  };
 
   useEffect(() => {
     callForecastInfo();
@@ -37,7 +129,12 @@ const WeatherContent = () => {
       if (!currentForecast) {
         getForecastInfo({ lat: location.lat, lon: location.lon }).then(
           (value: any) => {
-            setForecastInfo(value.tdata, value.fdata, value.relativeLocation);
+            setForecastInfo(
+              value.tdata,
+              value.fdata,
+              value.relativeLocation,
+              value.cdata
+            );
           }
         );
       }
@@ -48,10 +145,25 @@ const WeatherContent = () => {
 
   const subscribe = store.subscribe(callForecastInfo);
 
-  const setForecastInfo = (tdata: any, fdata: any, relativeLocation: any) => {
+  const setForecastInfo = (
+    tdata: any,
+    fdata: any,
+    relativeLocation: any,
+    cdata: any
+  ) => {
     setRelativeLocation(relativeLocation);
 
     let forecastData = fdata.properties.periods;
+    let currentForecast = cdata.properties;
+    let currentTemp = {
+      unit: currentForecast.temperature.unitCode.at(-1),
+      value: currentForecast.temperature.value,
+    };
+
+    if (currentTemp.unit === "C") {
+      currentTemp.value = convertToFarenheit(currentTemp.value);
+      currentTemp.unit = "F";
+    }
 
     let maxTemps = {
       unit: tdata.properties.maxTemperature.uom,
@@ -68,7 +180,20 @@ const WeatherContent = () => {
     let minTempsValues = minTemps.values;
     let minTempsUnit = minTemps.unit.at(-1);
 
+    // let currentTime = currentForecast.timestamp;
+
     let forecast = forecastData.map((p: WeatherPeriod) => {
+      let temp = () => {
+        if (p.number === 1) {
+          return currentTemp;
+        } else {
+          return {
+            unit: p.temperatureUnit,
+            value: p.temperature,
+          };
+        }
+      };
+
       let pDate = p.startTime.substring(0, p.startTime.indexOf("T"));
 
       let i = maxTempsValues.find((x: any) => {
@@ -85,9 +210,8 @@ const WeatherContent = () => {
       j ? (minTemp = j.value) : (minTemp = 1000);
 
       if (maxTempsUnit === "C" || minTempsUnit === "C") {
-        let temps = convertToFarenheit(maxTemp, minTemp);
-        maxTemp = temps.max;
-        minTemp = temps.min;
+        maxTemp = convertToFarenheit(maxTemp);
+        minTemp = convertToFarenheit(minTemp);
       }
 
       maxTemp = Math.round(maxTemp);
@@ -104,13 +228,13 @@ const WeatherContent = () => {
           value: p.probabilityOfPrecipitation.value,
         },
         relativeHumidity: {
-          unitCode: p.relativeHumidity.unitCode,
-          value: p.relativeHumidity.value,
+          // uom: p.relativeHumidity.uom,
+          // value: p.relativeHumidity.value,
         },
         shortForecast: p.shortForecast,
         startTime: p.startTime,
-        temperature: p.temperature,
-        temperatureUnit: p.temperatureUnit,
+        temperature: Math.round(Number(temp().value)),
+        temperatureUnit: temp().unit,
         windDirection: p.windDirection,
         windSpeed: p.windSpeed,
         maxTemperature: maxTemp,
@@ -128,19 +252,16 @@ const WeatherContent = () => {
     setCurrentForecast(forecast[i]);
   };
 
-  const convertToFarenheit = (max: number, min: number) => {
-    let temps = {
-      max: max * (9 / 5) + 32,
-      min: min * (9 / 5) + 32,
-    };
+  const convertToFarenheit = (t: number) => {
+    let temp = t * (9 / 5) + 32;
 
-    return temps;
+    return temp;
   };
 
   const formatDate = (p: WeatherPeriod) => {
     let date = p.startTime;
     const d = new Date(date).toLocaleDateString("en-us", {
-      weekday: "long",
+      weekday: "short",
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -150,87 +271,30 @@ const WeatherContent = () => {
 
   const iconSwitch = (p: WeatherPeriod) => {
     let sForecast = p.shortForecast;
-    let icon = <img alt="icon" />;
+    let graphic = "";
 
     sForecast?.includes("Thunderstorms")
-      ? (icon = (
-          <img
-            className="icon card-img-top"
-            src={Thunderstorm}
-            alt="Thunderstorms"
-          />
-        ))
+      ? (graphic = "thunderstorms")
       : sForecast?.includes("Rain")
-      ? (icon = <img className="icon card-img-top" src={Rain} alt="Rain" />)
+      ? (graphic = "rain")
       : sForecast?.includes("Cloudy")
       ? sForecast?.includes("Partly Cloudy")
         ? p.isDaytime
-          ? (icon = (
-              <img
-                className="icon card-img-top"
-                src={PartlyCloudyDay}
-                alt="Partly Cloudy"
-              />
-            ))
-          : (icon = (
-              <img
-                className="icon card-img-top"
-                src={PartlyCloudyNight}
-                alt="Partly Cloudy"
-              />
-            ))
-        : (icon = (
-            <img className="icon card-img-top" src={Cloudy} alt="Cloudy" />
-          ))
+          ? (graphic = "partlyCloudyDay")
+          : (graphic = "partlyCloudyNight")
+        : (graphic = "cloudy")
       : sForecast?.includes("Sunny") && p.isDaytime
-      ? (icon = <img className="icon card-img-top" src={Sunny} alt="Sunny" />)
+      ? (graphic = "sunny")
       : !p.isDaytime
-      ? (icon = (
-          <img
-            className="icon card-img-top"
-            src={ClearNight}
-            alt="Clear Night"
-          />
-        ))
-      : (icon = (
-          <img className="icon card-img-top" src={ClearDay} alt="Clear Day" />
-        ));
+      ? (graphic = "clearNight")
+      : (graphic = "clearDay");
 
-    return icon;
-  };
-
-
-  const formatLocation = (obj: any) => {
-    return `Forecast for ${obj.properties.city}, ${obj.properties.state}`;
-  };
-
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1264 },
-      items: 4,
-      slidesToSlide: 4, // optional, default to 1.
-    },
-    laptop: {
-      breakpoint: { max: 1264, min: 1024 },
-      items: 3,
-      slidesToSlide: 3, // optional, default to 1.
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-      slidesToSlide: 2, // optional, default to 1.
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-      slidesToSlide: 1, // optional, default to 1.
-    },
+    return graphic;
   };
 
   return (
     <div className="weather-content">
-      <div className="detail-div">
-        <Image src={Cloud} className="cloud-left" />
+      <div className="content">
         {currentForecast !== undefined ? (
           <>
             <CurrentWeather
@@ -238,47 +302,58 @@ const WeatherContent = () => {
               weather={currentForecast}
               date={formatDate(currentForecast)}
               relativeLocation={relativeLocation}
+              animation={graphics[iconSwitch(currentForecast)].animation}
             />
-            <h4>
-              <strong>{formatLocation(relativeLocation)}</strong>
-            </h4>
           </>
         ) : (
           "Data Loading"
         )}
-        <Image src={Cloud} className="cloud-right" />
       </div>
+      <div id="forecastTableDiv">
+        <Table id="forecastTable">
+          <tbody>
+            {forecast.map((period) => (
+              <tr
+                onClick={() => updateCurrentForecast(period.number)}
+                className={
+                  currentForecast?.number === period.number ? "selected" : ""
+                }
+              >
+                <td style={{ width: "10%" }}>
+                  <p className="p-small">
+                    {formatDate(period).slice(
+                      0,
+                      formatDate(period).lastIndexOf(",")
+                    )}
+                  </p>
+                </td>
 
-      <Carousel
-        additionalTransfrom={0}
-        responsive={responsive}
-        showDots={false}
-        keyBoardControl={true}
-        slidesToSlide={4}
-        swipeable={true}
-        draggable={true}
-        infinite={true}
-      >
-        {forecast.map((period) => (
-          <Card
-            className="cardSimpleView"
-            key={period.number}
-            onClick={() => updateCurrentForecast(period.number)}
-          >
-            <Card.Body className="cardBody">
-              <div>
-                <small>{formatDate(period)}</small>
-              </div>
-              {iconSwitch(period)}
-              <Card.Title>{period.name}</Card.Title>
-              <Card.Text>
-                {period.temperature + period.temperatureUnit}
-              </Card.Text>
-              <Card.Text>{period.shortForecast}</Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
-      </Carousel>
+                <td style={{ width: "10%" }}>
+                  {period.maxTemperature < 200 &&
+                  period.minTemperature < 200 ? (
+                    <p style={{ marginTop: 0 }}>
+                      <strong>
+                        {period.maxTemperature}°{period.minMaxTemperatureUnit}
+                      </strong>{" "}
+                      <span className="p-small">
+                        | {period.minTemperature}°{period.minMaxTemperatureUnit}
+                      </span>
+                    </p>
+                  ) : (
+                    ""
+                  )}
+                </td>
+                <td>
+                  {graphics[iconSwitch(period)].icon}
+                  <p className="p-small" style={{ display: "inline-block" }}>
+                    {period.shortForecast}
+                  </p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
 };

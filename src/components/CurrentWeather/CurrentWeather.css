@@ -1,13 +1,30 @@
 .cardDetailedView{
     --bs-card-bg:transparent !important;
-    width: 85%;
-    margin: 20px auto;
+    margin: 0 auto;
+    /* height: 40vh !important; */
+    /* height: 40vh; */
+    padding: 0;
+    border-radius: 0 !important;
+    /* color: var(--dark-gray) !important; */
+    color: var(--blue) !important;
+
 }
 
-.largeIcon {
-    height: 250px;
-    filter: drop-shadow(1px 1px #3F2121)
+.cardDetailedView .card-body{
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-flow:column;
+    max-height: 40vh;
 }
 
+.cardDetailedView .row{
+    margin: 0;
+    /* padding: 10px; */
+}
 
+#lottieDiv svg{
+    max-width: 90% !important;
+    /* height: 80% !important; */
+}
 

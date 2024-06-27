@@ -1,70 +1,96 @@
+import Lottie from "react-lottie";
 import { Card } from "react-bootstrap";
 import "./CurrentWeather.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { defaultLottieOptions } from "../../utils/Helpers";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import Animation from `../../assets/animations/girl-day-rain.gif`;
 
-const CurrentWeather = ({weather, date, relativeLocation}: any) => {
-
+const CurrentWeather = ({
+  weather,
+  date,
+  relativeLocation,
+  animation,
+}: any) => {
   const forecast = weather.shortForecast;
   const location = `${relativeLocation.properties.city}, ${relativeLocation.properties.state}`;
 
-  //Import all files from Animation folder into files array
-  const files: string[] =[];
-
-  const importAnimations = (r:any) => {
-    r.keys().forEach((f:string) => {
-
-      const fileName = f.split('/').pop() as string;
-      files.push(fileName);
-    })
-  }
-
-  const animations = importAnimations(require.context(`${process.env.REACT_APP_ASSETS_FOLDER}/animations`,false,/[\s\S]*/));
-
-  const getAnimation = () => {
-    const name = files[0];
-    const file = require(`${process.env.REACT_APP_ASSETS_FOLDER}/animations/${name}`);
-
-    let animation = (<Card.Img variant="left" src={file} className="largeIcon" />)
-
-    return animation;
-  }
   return (
-    <Card className="cardDetailedView">
+    <Card
+      className="cardDetailedView gradient-border fadeIn"
+      key={weather.number}
+    >
       <Card.Body>
-        <div className="row">
-          <div className="col-4">
-          <strong>{location}</strong> <br/>
-            {getAnimation()}
+        <div
+          className="row"
+          style={{
+            textAlign: "left",
+            padding: "10px 0 0 0",
+            height: "40px",
+            flex: "none",
+          }}
+        >
+          <div className="col-5" style={{ flex: "auto" }}>
+            <Card.Title>{location}</Card.Title>
+          </div>
+          <div className="col-7" style={{ textAlign: "right", flex: "auto" }}>
+            {/* <strong> */}{" "}
+            <p className="p-small" style={{ marginBottom: 0 }}>
+              {date} | {weather.isDaytime ? "Day" : "Night"}
+            </p>
+            {/* </strong> */}
+          </div>
+        </div>
+
+        <div className="row" style={{ flex: "1 1 auto" }}>
+          <div className="col-3">
+            <div id="lottieDiv"
+              style={{
+                height: "25vh",
+                margin: "0 auto",
+                width: "15vw",
+                textAlign: "center",
+              }}
+            >
+              <Lottie options={defaultLottieOptions(animation)} />
+            </div>
+            {/* <p className="p-small">{weather.shortForecast}</p> */}
+          </div>
+          <div className="col-9" style={{ textAlign: "right" }}>
+            <h1 style={{ marginBottom: 0 }}>
+              {weather.temperature}°{weather.temperatureUnit}
+            </h1>
             {weather.maxTemperature < 200 && weather.minTemperature < 200 ? (
-              <div>
-                <small className="bold">
+              <div style={{ marginTop: 0 }}>
+                <p className="bold p-small" style={{ marginBottom: 0 }}>
                   {weather.maxTemperature}°{weather.minMaxTemperatureUnit} |{" "}
                   {weather.minTemperature}°{weather.minMaxTemperatureUnit}
-                </small>
+                </p>
               </div>
             ) : (
-              <div></div>
+              ""
             )}
-          </div>
-          <div className="col-8">
-            <Card.Title>
-              {date} ({weather.isDaytime ? "Day" : "Night"})
-            </Card.Title>
             <Card.Text>{weather.detailedForecast}</Card.Text>
-            <div className="row">
-                <div className="col">
-                <FontAwesomeIcon icon={['fas', 'cloud-rain']} /> Precipitation
-                   <h5>{weather.probabilityOfPrecipitation.value ? weather.probabilityOfPrecipitation.value : "0%"}</h5>
-                </div>
-                <div className="col">
-                <FontAwesomeIcon icon={['fas', 'droplet']} /> Humidity
-                    <h5>{weather.relativeHumidity.value ? weather.relativeHumidity.value + "%": ""}</h5>
-                </div>
-                <div className="col">
-                <FontAwesomeIcon icon={['fas', 'wind']} /> Wind Speed
-                    <h5>{weather.windSpeed ? weather.windDirection + " " + weather.windSpeed : ""}</h5>
-                </div>
+            <div style={{ textAlign: "right" }}>
+              {/* <div> */}
+              <FontAwesomeIcon
+                icon={["fas", "cloud-rain"]}
+                style={{ display: "inline-block" }}
+              />{" "}
+              <p style={{ display: "inline-block", marginRight: "20px" }}>
+                {weather.probabilityOfPrecipitation.value
+                  ? `${weather.probabilityOfPrecipitation.value}%`
+                  : "0%"}
+              </p>
+              {/* </div> */}
+              {/* <div> */}
+              <FontAwesomeIcon icon={["fas", "wind"]} />{" "}
+              <p style={{ display: "inline-block" }}>
+                {weather.windSpeed
+                  ? weather.windDirection + " " + weather.windSpeed
+                  : ""}
+              </p>
+              {/* </div> */}
             </div>
           </div>
         </div>

@@ -2,7 +2,15 @@ import "./Header.css";
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../redux/helpers";
 import { updateLocation } from "../../redux/actions";
-import { Button, Container, InputGroup, Navbar, Form } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  InputGroup,
+  Navbar,
+  Form,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
 import "react-select-search/style.css";
@@ -10,6 +18,7 @@ import "react-select-search/style.css";
 import { store } from "../../store";
 /**APIs */
 import { getGeoInfo } from "../../apis/getGeoInfo";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 const Header = () => {
   const dispatch = useAppDispatch();
   const [options, setOptions] = useState<any[]>([]);
@@ -27,7 +36,7 @@ const Header = () => {
   const mapOptions = (query: any) => {
     const promise = Promise.resolve(getGeoInfo(query));
     promise.then((values: any) => {
-      console.log(values);
+      // console.log(values);
       const x: any = [];
       values.map((value: any) =>
         x.push({
@@ -41,13 +50,12 @@ const Header = () => {
   };
 
   const queryLatLong = (latLon: { lat: string; lon: string }) => {
-    console.log(store.getState());
     dispatch(updateLocation(latLon));
-    console.log(store.getState());
+    // console.log(store.getState());
   };
 
   const handleChange = (selectedOption: any) => {
-    console.log(selectedOption)
+    console.log(selectedOption);
     if (selectedOption) {
       const selected = {
         lat: selectedOption.value.lat,
@@ -58,48 +66,131 @@ const Header = () => {
   };
 
   return (
-    <>
-    <Navbar className="navBar">
-      <Container>
-        <Navbar.Brand href="#home">A To Zion Web Design, LLC</Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          <Select
-            id="querySelect"
-            className="search-input"
-            placeholder="City, State or Zip Code"
-            onInputChange={getOptions}
-            options={options}
-            isClearable
-            onChange={handleChange}
-            styles={{
-              control: (baseStyles, state) => ({
-                ...baseStyles,
-                borderColor: 'transparent',
-                borderRadius: '25px',
-                backgroundColor: 'rgba(165, 105, 86, 1)',
+    <div id="headerDiv">
+      <Row style={{height:"10px"}}>
+        <Col style={{backgroundColor:"var(--green)"}}></Col>
+        <Col style={{backgroundColor:"var(--yellow)"}}></Col>
+        <Col style={{backgroundColor:"var(--pink)"}}></Col>
+        <Col style={{backgroundColor:"var(--blue)"}}></Col>
+        <Col style={{backgroundColor:"var(--green)"}}></Col>
+        <Col style={{backgroundColor:"var(--yellow)"}}></Col>
+        <Col style={{backgroundColor:"var(--pink)"}}></Col>
+        <Col style={{backgroundColor:"var(--blue)"}}></Col>
+        <Col style={{backgroundColor:"var(--green)"}}></Col>
+        <Col style={{backgroundColor:"var(--yellow)"}}></Col>
+        <Col style={{backgroundColor:"var(--pink)"}}></Col>
+        <Col style={{backgroundColor:"var(--blue)"}}></Col>
 
-              }),
-              placeholder: (baseStyles, state) => ({
-                ...baseStyles,
-                color: 'rgba(267, 216,154,1)'
-              }),
-              singleValue: (baseStyles, state) => ({
-                ...baseStyles,
-                color: 'rgba(267, 216,154,1)'
-              }),
-              input: (baseStyles, state) => ({
-                ...baseStyles,
-                color: 'rgba(267, 216,154,1)',
-                fontWeight: 'bold'
-              }),
-            }}
-          />
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-    </>
-
+      </Row>
+      <div className="content">
+        <Row className="navbar">
+          <Col style={{ textAlign: "left" }}>
+            <img
+              src={require("../../assets/images/rainbow.svg").default}
+              alt=""
+              id="navIcon"
+            /> <strong>Weather Forecast</strong>
+          </Col>
+          <Col></Col>
+          <Col style={{ textAlign: "right" }}>
+            <span style={{ color: "var(--blue)" }}>US | &#176;F </span>
+            {/* <FontAwesomeIcon
+              icon={faUser}
+              style={{ color: "var(--blue)" }}
+            /> */}
+          </Col>
+        </Row>
+      </div>
+      <Row id="headerImgDiv">
+        <img
+          id="headerImg"
+          src={require("../../assets/images/weather.svg").default}
+          alt=""
+        />
+      </Row>
+      <Row
+        className=""
+        style={{
+          backgroundColor: "var(--pink)",
+          // borderTop:"1px solid var(--yellow)",
+          // borderBottom:"1px solid var(--yellow)",
+          textAlign: "center",
+          padding: "10px",
+        }}
+      >
+        <Select
+          id="querySelect"
+          className="search-input"
+          placeholder="Search City, State or Zip Code"
+          onInputChange={getOptions}
+          options={options}
+          isClearable
+          onChange={handleChange}
+          styles={{
+            control: (baseStyles, state) => ({
+              ...baseStyles,
+              borderColor: "transparent",
+              backgroundColor: "var(--light-gray)",
+              boxShadow: "none",
+              borderRadius: "25px",
+              ":hover":{
+                borderColor:"var(--blue)"
+              }
+            }),
+            placeholder: (baseStyles, state) => ({
+              ...baseStyles,
+              color: "var(--blue)",
+            }),
+            singleValue: (baseStyles, state) => ({
+              ...baseStyles,
+              color: "var(--blue)",
+            }),
+            input: (baseStyles, state) => ({
+              ...baseStyles,
+              color: "var(--blue)",
+            }),
+            menu: (baseStyles, state) => ({
+              ...baseStyles,
+              color: "var(--blue)",
+              backgroundColor: "var(--light-gray)",
+              border: "1px solid var(--blue)",
+              fontSize: "14px"
+            }),
+            menuList: (baseStyles, state) => ({
+              ...baseStyles,
+              "::-webkit-scrollbar": {
+                width: "10px",
+              },
+              "::-webkit-scrollbar-track": {
+                backgroundColor: "var(--light-gray)",
+                borderLeft: "1px solid var(--gray)",
+              },
+              "::-webkit-scrollbar-thumb": {
+                backgroundColor: "var(--gray)",
+              },
+            }),
+            option: (baseStyles, state) => ({
+              ...baseStyles,
+              backgroundColor: state.isSelected
+                ? "var(--blue)"
+                : "var(--light-gray)",
+              "&:hover": {
+                backgroundColor: "var(--blue)",
+                color: "var(--light-gray)",
+              },
+            }),
+            dropdownIndicator: (baseStyles, state) => ({
+              ...baseStyles,
+                color:"var(--blue)",
+                ":hover": {
+                  color: "var(--dark-gray)",
+                  cursor: "pointer"
+                }
+            })
+          }}
+        />
+      </Row>
+    </div>
   );
 };
 

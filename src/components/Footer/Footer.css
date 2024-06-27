@@ -1,0 +1,23 @@
+#footerDiv{
+    height: 100px;
+    background-color: var(--blue);
+    color: var(--light-gray)
+}
+
+#footerContent{
+    height: 90px;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto !important;
+
+}
+
+#footerContent a{
+    color: var(--light-gray);
+    text-decoration: none;
+}
+
+#logo50{
+    margin-right: 10px;
+
+}

@@ -1,36 +1,68 @@
+/* Custom Properties*/
+:root{
+  /* colors */
 
+ --blue: #26547C;
+ --pink: #EF476F;
+ --yellow: #FFD166;
+ --green: #06D6A0;
+ --light-gray: #FFFCF9;
+ --dark-gray: #080809;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+#appDiv{
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 100%;
+  /* background-color: var(--gray);
+  color: var(--peach); */
+}
+.p-small{
+  font-size: 12px;
 }
 
-.App-link {
-  color: #61dafb;
+.flex-auto{
+  flex: auto;
 }
 
-@keyframes App-logo-spin {
+.content{
+  width: 80%;
+  margin: 0 auto;
+  padding: 0
+}
+
+.gradient-border{
+  border: 5px solid !important;
+  border-image:   linear-gradient(to right, var(--green) 25%, var(--yellow) 25%, var(--yellow) 50%, var(--pink) 50%, var(--pink) 75%, var(--blue) 75%) 5 !important;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.icon{
+  height: 40px;
+  margin-right: 10px;
+  /* filter: drop-shadow(1px 1px var(--dark-gray)) */
+}
+
+.row{
+  margin: 0 !important;
+
+}
+
+/* Animations */
+
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
   }
 }
+.fadeIn{
+  animation: fadeIn 5s;
+}
+
+

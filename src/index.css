@@ -4,10 +4,6 @@ body {
   font-family: 'Italiana', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(#F7D89A, #F7D89A);
-/*
-
-    /* background-attachment: fixed; */
     text-align: center !important;
 }
 

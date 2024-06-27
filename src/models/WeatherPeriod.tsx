@@ -9,8 +9,8 @@ export interface WeatherPeriod {
       value: number | null;
     };
     relativeHumidity: {
-      unitCode: string;
-      value: number | null;
+      // uom: string | null;
+      // value: number | null;
     };
     shortForecast: string;
     startTime: string;

@@ -1,9 +1,36 @@
-.navBar {
-    background-color: #A53F2B;
+#headerDiv{
+    /* height: 40vh;
+    display: flex;
+    flex-flow: column; */
+    /* overflow: hidden; */
+    background-color: var(--light-gray);
+    margin: 0;
 }
 
-.search-input {
-    z-index: 2;
-    right:0;
-    width:80%;
+.navbar {
+    padding: 0 !important;
+    color: var(--blue);
+}
+
+#navIcon{
+    height: 50px;
+}
+
+#querySelect {
+    width:50%;
+    margin: 0 auto;
+}
+
+#headerImgDiv{
+    /* flex: 1 1 auto; */
+
+     height: 30vh;
+    width: 100%;
+    background-color: var(--blue);
+
+}
+#headerImg{
+    object-fit: contain !important;
+    height: 100%;
+    width: 100%;
 }
