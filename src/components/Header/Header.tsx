@@ -67,20 +67,19 @@ const Header = () => {
 
   return (
     <div id="headerDiv">
-      <Row style={{height:"10px"}}>
-        <Col style={{backgroundColor:"var(--green)"}}></Col>
-        <Col style={{backgroundColor:"var(--yellow)"}}></Col>
-        <Col style={{backgroundColor:"var(--pink)"}}></Col>
-        <Col style={{backgroundColor:"var(--blue)"}}></Col>
-        <Col style={{backgroundColor:"var(--green)"}}></Col>
-        <Col style={{backgroundColor:"var(--yellow)"}}></Col>
-        <Col style={{backgroundColor:"var(--pink)"}}></Col>
-        <Col style={{backgroundColor:"var(--blue)"}}></Col>
-        <Col style={{backgroundColor:"var(--green)"}}></Col>
-        <Col style={{backgroundColor:"var(--yellow)"}}></Col>
-        <Col style={{backgroundColor:"var(--pink)"}}></Col>
-        <Col style={{backgroundColor:"var(--blue)"}}></Col>
-
+      <Row style={{ height: "10px" }}>
+        <Col style={{ backgroundColor: "var(--green)" }}></Col>
+        <Col style={{ backgroundColor: "var(--yellow)" }}></Col>
+        <Col style={{ backgroundColor: "var(--pink)" }}></Col>
+        <Col style={{ backgroundColor: "var(--blue)" }}></Col>
+        <Col style={{ backgroundColor: "var(--green)" }}></Col>
+        <Col style={{ backgroundColor: "var(--yellow)" }}></Col>
+        <Col style={{ backgroundColor: "var(--pink)" }}></Col>
+        <Col style={{ backgroundColor: "var(--blue)" }}></Col>
+        <Col style={{ backgroundColor: "var(--green)" }}></Col>
+        <Col style={{ backgroundColor: "var(--yellow)" }}></Col>
+        <Col style={{ backgroundColor: "var(--pink)" }}></Col>
+        <Col style={{ backgroundColor: "var(--blue)" }}></Col>
       </Row>
       <div className="content">
         <Row className="navbar">
@@ -89,9 +88,23 @@ const Header = () => {
               src={require("../../assets/images/rainbow.svg").default}
               alt=""
               id="navIcon"
-            /> <strong>Weather Forecast</strong>
+            />{" "}
+            <p
+              style={{
+                display: "inline-block",
+                verticalAlign: "middle",
+                marginBottom: 0,
+              }}
+            >
+              <span>
+                <strong>RAINBOW FORECAST</strong>
+              </span>
+              <span className="p-small" style={{ display: "block" }}>
+                You Can't Have A Rainbow Without A Little Rain
+              </span>
+            </p>
           </Col>
-          <Col></Col>
+          {/* <Col></Col> */}
           <Col style={{ textAlign: "right" }}>
             <span style={{ color: "var(--blue)" }}>US | &#176;F </span>
             {/* <FontAwesomeIcon
@@ -133,9 +146,9 @@ const Header = () => {
               backgroundColor: "var(--light-gray)",
               boxShadow: "none",
               borderRadius: "25px",
-              ":hover":{
-                borderColor:"var(--blue)"
-              }
+              ":hover": {
+                borderColor: "var(--blue)",
+              },
             }),
             placeholder: (baseStyles, state) => ({
               ...baseStyles,
@@ -154,7 +167,7 @@ const Header = () => {
               color: "var(--blue)",
               backgroundColor: "var(--light-gray)",
               border: "1px solid var(--blue)",
-              fontSize: "14px"
+              fontSize: "14px",
             }),
             menuList: (baseStyles, state) => ({
               ...baseStyles,
@@ -181,12 +194,12 @@ const Header = () => {
             }),
             dropdownIndicator: (baseStyles, state) => ({
               ...baseStyles,
-                color:"var(--blue)",
-                ":hover": {
-                  color: "var(--dark-gray)",
-                  cursor: "pointer"
-                }
-            })
+              color: "var(--blue)",
+              ":hover": {
+                color: "var(--dark-gray)",
+                cursor: "pointer",
+              },
+            }),
           }}
         />
       </Row>
